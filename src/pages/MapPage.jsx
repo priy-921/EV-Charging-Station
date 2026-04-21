@@ -15,10 +15,13 @@ export default function MapPage() {
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/stations')
-      .then(res => setStations(res.data))
-      .catch(err => console.log(err));
-  }, []);
+  axios.get('http://localhost:3001/stations')
+    .then(res => {
+      console.log(res.data);   // 👈 ADD THIS LINE HERE
+      setStations(res.data);
+    })
+    .catch(err => console.log(err));
+}, []);
 
   return (
     <div>
@@ -28,9 +31,15 @@ export default function MapPage() {
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         {stations.map(s => (
-          <Marker key={s.station_id} position={[s.latitude, s.longitude]}>
+          <Marker 
+          position={[
+  parseFloat(s.latitude),
+  parseFloat(s.longitude)
+]}
+  
+>
             <Popup>
-              {s.station_name} <br />
+              {s.name} <br />
               {s.city}
             </Popup>
           </Marker>
